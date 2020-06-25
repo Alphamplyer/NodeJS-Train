@@ -1,1 +1,5 @@
+
 node_modules/ 
+
+#> ignore to secure sensitive information
+nodemon.json
