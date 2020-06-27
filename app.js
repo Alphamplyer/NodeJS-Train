@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 
 // Routes
 const productRoutes = require('./api/routes/products');
+const orderRoutes = require('./api/routes/orders');
 
 // DATABASE
 mongoose.connect(
@@ -41,6 +42,7 @@ app.use((request, response, next) => {
 
 // Routes which should handle request
 app.use('/products', productRoutes);
+app.use('/orders', orderRoutes);
 
 // Error Handler
 app.use((request, response, next) => {

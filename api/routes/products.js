@@ -101,9 +101,6 @@ router.get('/:productId', (request, response, next) => {
 });
 
 router.patch("/:productId", (request, response, next) => {
-    console.log("[INFO] name =", request.body.name);
-    console.log("[INFO] price =", request.body.price);
-
     Product.updateOne(
         { _id: request.params.productId },
         { 
@@ -141,7 +138,7 @@ router.delete('/:productId', (request, response, next) => {
                 url: 'http://localhost:49152/products',
                 body: {
                     name: 'String',
-                    prince: 'Number'
+                    price: 'Number'
                 }
             }
         });
