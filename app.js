@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 // Routes
 const productRoutes = require('./api/routes/products');
 const orderRoutes = require('./api/routes/orders');
+const userRoutes = require('./api/routes/users')
 
 // DATABASE
 mongoose.connect(
@@ -14,7 +15,8 @@ mongoose.connect(
     '@devapp-rk8vh.mongodb.net/DevApp?retryWrites=true&w=majority',
     { 
         useNewUrlParser: true,
-        useUnifiedTopology: true
+        useUnifiedTopology: true,
+        useCreateIndex: true
     }
 )
 .then(console.log('connection to database established'))
@@ -43,6 +45,7 @@ app.use((request, response, next) => {
 // Routes which should handle request
 app.use('/products', productRoutes);
 app.use('/orders', orderRoutes);
+app.use('/users', userRoutes);
 
 // Error Handler
 app.use((request, response, next) => {
