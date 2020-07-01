@@ -73,7 +73,7 @@ router.post('/login', (request, response, next) => {
                         email: user.email, 
                         userId: user._id 
                     },
-                    process.end.JWT_KEY, 
+                    process.env.JWT_KEY, 
                     {
                         expiresIn: '1h'
                     }
@@ -83,9 +83,7 @@ router.post('/login', (request, response, next) => {
                     token: token
                 })
             }
-        })
-        
-        bcrypt.hash
+        });
     })
     .catch(err => {
         console.log(err);
