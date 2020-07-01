@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 
@@ -15,7 +16,7 @@ router.post('/signup', (request, response, next) => {
             })
         }
         else {
-            const hashedPassword = bcrypt.hash(request.body.password, 10, (err, hash) => {
+            bcrypt.hash(request.body.password, 10, (err, hash) => {
                 if (err) {
                     return response.status(500).json({
                         error: err
@@ -24,7 +25,7 @@ router.post('/signup', (request, response, next) => {
                     const user = new User ({
                         _id: new mongoose.Types.ObjectId(),
                         email: request.body.email,
-                        password: hashedPassword
+                        password: hash
                     });
                     user.save()
                     .then(result => {
@@ -42,6 +43,49 @@ router.post('/signup', (request, response, next) => {
                 }
             });
         }
+    })
+    .catch(err => {
+        console.log(err);
+        response.status(500).json({
+            error: err
+        });
+    });
+});
+
+router.post('/login', (request, response, next) => {
+    User.findOne({ email: request.body.email })
+    .exec()
+    .then(user => {
+        if (user.length < 1) {
+            return response.status(401).json({
+                message: "Authentification fail"
+            })
+        }
+        bcrypt.compare(request.body.password, user.password, (err, result) => {
+            if (err) {
+                return response.status(401).json({
+                    message: "Authentification fail"
+                })
+            }
+            if (result) {
+                const token = jwt.sign(
+                    { 
+                        email: user.email, 
+                        userId: user._id 
+                    },
+                    process.end.JWT_KEY, 
+                    {
+                        expiresIn: '1h'
+                    }
+                );
+                return response.status(200).json({
+                    message: 'Authentification succeeded',
+                    token: token
+                })
+            }
+        })
+        
+        bcrypt.hash
     })
     .catch(err => {
         console.log(err);
