@@ -6,7 +6,10 @@ const Order = require('../models/order');
 const Product = require('../models/product');
 
 router.get('/', (request, response, next) => {
-    Order.find().exec()
+    Order.find()
+    .select("product quantity _id")
+    .populate('product', 'name')
+    .exec()
     .then(docs => {
         const result = {
             count: docs.length,
@@ -79,7 +82,10 @@ router.post('/', (request, response, next) => {
 });
 
 router.get('/:orderId', (request, response, next) => {
-    Order.findById(request.params.orderId).exec()
+    Order.findById(request.params.orderId)
+    .select("product quantity _id")
+    .populate('product', 'name')
+    .exec()
     .then(result => {
         console.log(result);
         response.status(201).json({
