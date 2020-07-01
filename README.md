@@ -34,3 +34,5 @@ Make sure to also add your Mongo Atlas Admin Password and an encryption key for 
     }
 }
 ```
+
+Make sure to add ```uploads``` directory in base project directory for uploaded images.

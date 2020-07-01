@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const multer = require('multer');
+const checkAuth = require('../middleware/check-auth');
 
 /// UPLOAD IMAGES SETTINGS ///////////////////////////////////////////////////////////////////////////////////////
 
@@ -34,6 +35,8 @@ const upload = multer({
 /// IMPORT PRODUCT MODEL  ////////////////////////////////////////////////////////////////////////////////////////
 
 const Product = require('../models/product');
+
+/// ROUTES ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // REQUESTS : /products
 
@@ -75,7 +78,7 @@ router.get('/', (request, response, next) => {
     });
 });
 
-router.post('/', upload.single('productImage'), (request, response, next) => {
+router.post('/', checkAuth, upload.single('productImage'), (request, response, next) => {
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
         name: request.body.name,
@@ -134,7 +137,7 @@ router.get('/:productId', (request, response, next) => {
     });
 });
 
-router.patch("/:productId", (request, response, next) => {
+router.patch("/:productId", checkAuth, (request, response, next) => {
     Product.updateOne(
         { _id: request.params.productId },
         { 
@@ -161,7 +164,7 @@ router.patch("/:productId", (request, response, next) => {
     });
 });
 
-router.delete('/:productId', (request, response, next) => {
+router.delete('/:productId', checkAuth, (request, response, next) => {
     Product.remove({ _id: request.params.productId })
     .exec()
     .then(result => {
