@@ -1,10 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
 const checkAuth = require('../middleware/check-auth');
-
-const Order = require('../models/order');
-const Product = require('../models/product');
 
 const OrdersController = require('../controllers/ordersController');
 
@@ -27,7 +23,6 @@ router.patch('/:orderId', checkAuth, OrdersController.orders_update);
 /// DELETE REQUEST ///////////////////////////////////////////////////////////////////////////////////////////////
 
 router.delete('/:orderId', checkAuth, OrdersController.orders_delete);
-
 
 
 module.exports = router;
